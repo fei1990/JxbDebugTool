@@ -54,7 +54,9 @@
     self = [super init];
     if (self) {
         self.mainColor = [UIColor redColor];
-        self.debugWin = [[JxbDebugWindow alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 20)];
+        self.debugWin = [[JxbDebugWindow alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
+        UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panView:)];
+        [self.debugWin addGestureRecognizer:pan];
     }
     return self;
 }
@@ -73,7 +75,7 @@
     self.debugWin.windowLevel = UIWindowLevelStatusBar+1;
     self.debugWin.hidden = NO;
     
-    self.debugBtn = [[UIButton alloc] initWithFrame:CGRectMake(2, 2, 91, 15)];
+    self.debugBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 70, 30)];
     self.debugBtn.backgroundColor = self.mainColor;
     self.debugBtn.layer.cornerRadius = 3;
     self.debugBtn.titleLabel.font = [UIFont systemFontOfSize:10];
@@ -147,4 +149,15 @@
         return [NSString stringWithFormat:@"%.1fG", (float)n / (float)GB];
     }
 }
+
+#pragma mark pan   平移手势事件
+-(void)panView:(UIPanGestureRecognizer *)sender{
+    CGPoint point = [sender translationInView:self.debugWin];
+
+    sender.view.transform = CGAffineTransformTranslate(sender.view.transform, point.x, point.y);
+    //增量置为o
+    [sender setTranslation:CGPointZero inView:sender.view];
+    
+}
+
 @end
